@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Fomatech Engineering</title>
-    <link>https://jkososki.github.io/</link>
-    <description>Recent content on Fomatech Engineering</description>
+    <title>Posts on Fomatech Engineering</title>
+    <link>https://jkososki.github.io/posts/</link>
+    <description>Recent content in Posts on Fomatech Engineering</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 15 Jan 2022 09:16:26 -0600</lastBuildDate><atom:link href="https://jkososki.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 15 Jan 2022 09:16:26 -0600</lastBuildDate><atom:link href="https://jkososki.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Secure YAML Pipelines in Azure Dev Ops</title>
       <link>https://jkososki.github.io/posts/ado/ado-secure-yaml/</link>
@@ -15,8 +15,6 @@
       <guid>https://jkososki.github.io/posts/ado/ado-secure-yaml/</guid>
       <description></description>
     </item>
-    
-    
     
   </channel>
 </rss>
