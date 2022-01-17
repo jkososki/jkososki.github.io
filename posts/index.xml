@@ -13,7 +13,7 @@
       <pubDate>Sat, 15 Jan 2022 09:16:26 -0600</pubDate>
       
       <guid>https://jkososki.github.io/posts/ado-secure-yaml/</guid>
-      <description></description>
+      <description>Let’s talk about YAML pipelines in Azure DevOps. YAML pipelines are great! Using YAML pipelines in Azure DevOps allows deployment pipelines to be expressed as code. Expressing pipelines as code simplifies the use of version control to support build &amp;amp; release pipelines. It also allows DevOps professionals to create libraries of pipeline code that can be reused to accelerate new tasks. All of this is great, but it is also important to ensure that pipelines are secure.</description>
     </item>
     
   </channel>

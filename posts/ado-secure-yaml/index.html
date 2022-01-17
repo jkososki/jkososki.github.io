@@ -7,7 +7,7 @@
 <meta name="robots" content="index, follow">
 <title>Secure YAML Pipelines in Azure Dev Ops | Fomatech</title>
 <meta name="keywords" content="" />
-<meta name="description" content="Secure YAML Pipelines in Azure Dev Ops - Fomatech">
+<meta name="description" content="Let’s talk about YAML pipelines in Azure DevOps. YAML pipelines are great! Using YAML pipelines in Azure DevOps allows deployment pipelines to be expressed as code. Expressing pipelines as code simplifies the use of version control to support build &amp; release pipelines. It also allows DevOps professionals to create libraries of pipeline code that can be reused to accelerate new tasks. All of this is great, but it is also important to ensure that pipelines are secure.">
 <meta name="author" content="Jason Kososki">
 <link rel="canonical" href="https://jkososki.github.io/posts/ado-secure-yaml/" />
 <link crossorigin="anonymous" href="/assets/css/stylesheet.min.c88963fe2d79462000fd0fb1b3737783c32855d340583e4523343f8735c787f0.css" integrity="sha256-yIlj/i15RiAA/Q&#43;xs3N3g8MoVdNAWD5FIzQ/hzXHh/A=" rel="preload stylesheet" as="style">
@@ -58,17 +58,17 @@
 
     </style>
 </noscript><meta property="og:title" content="Secure YAML Pipelines in Azure Dev Ops" />
-<meta property="og:description" content="" />
+<meta property="og:description" content="Let’s talk about YAML pipelines in Azure DevOps. YAML pipelines are great! Using YAML pipelines in Azure DevOps allows deployment pipelines to be expressed as code. Expressing pipelines as code simplifies the use of version control to support build &amp; release pipelines. It also allows DevOps professionals to create libraries of pipeline code that can be reused to accelerate new tasks. All of this is great, but it is also important to ensure that pipelines are secure." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://jkososki.github.io/posts/ado-secure-yaml/" />
-<meta property="og:image" content="https://jkososki.github.io/security_001.jpg" /><meta property="article:section" content="posts" />
+<meta property="og:image" content="https://jkososki.github.io/img/security_001.jpg" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-01-15T09:16:26-06:00" />
 <meta property="article:modified_time" content="2022-01-15T09:16:26-06:00" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:image" content="https://jkososki.github.io/security_001.jpg" />
+<meta name="twitter:image" content="https://jkososki.github.io/img/security_001.jpg" />
 <meta name="twitter:title" content="Secure YAML Pipelines in Azure Dev Ops"/>
-<meta name="twitter:description" content=""/>
+<meta name="twitter:description" content="Let’s talk about YAML pipelines in Azure DevOps. YAML pipelines are great! Using YAML pipelines in Azure DevOps allows deployment pipelines to be expressed as code. Expressing pipelines as code simplifies the use of version control to support build &amp; release pipelines. It also allows DevOps professionals to create libraries of pipeline code that can be reused to accelerate new tasks. All of this is great, but it is also important to ensure that pipelines are secure."/>
 
 
 <script type="application/ld+json">
@@ -97,14 +97,14 @@
   "@type": "BlogPosting",
   "headline": "Secure YAML Pipelines in Azure Dev Ops",
   "name": "Secure YAML Pipelines in Azure Dev Ops",
-  "description": "",
+  "description": "Let’s talk about YAML pipelines in Azure DevOps. YAML pipelines are great! Using YAML pipelines in Azure DevOps allows deployment pipelines to be expressed as code. Expressing pipelines as code simplifies the use of version control to support build \u0026amp; release pipelines. It also allows DevOps professionals to create libraries of pipeline code that can be reused to accelerate new tasks. All of this is great, but it is also important to ensure that pipelines are secure.",
   "keywords": [
     
   ],
-  "articleBody": "",
-  "wordCount" : "0",
+  "articleBody": "Let’s talk about YAML pipelines in Azure DevOps. YAML pipelines are great! Using YAML pipelines in Azure DevOps allows deployment pipelines to be expressed as code. Expressing pipelines as code simplifies the use of version control to support build \u0026 release pipelines. It also allows DevOps professionals to create libraries of pipeline code that can be reused to accelerate new tasks. All of this is great, but it is also important to ensure that pipelines are secure. One approach to securing a pipeline is to set a clear separation of responsibilities between those who write the code and those who manage the resources that deploy and execute the code. In some industries this may be more than a best practice; it may be a requirement. Today we’re going to walk through the implementation of a pattern that can be leveraged to build a secure environment that encourages collaboration and cross-training. Core Concepts There are a few core concepts that we’ll be working with to impliment our pattern. These Azure DevOps features will allow us to secure resources when using YAML templates.\nApprovals and Checks A service connection is what allows Azure DevOps (ADO) to securely connect to external resources such as the Azure Resource Manager, Kubernetes, etc. It is possible to add all sorts of conditions around the use of a service connection. These are known as Approvals \u0026 Checks. We will be using Approvals and Required Templates as part of our project.  Note: It is possible to use Approvals \u0026 Checks with other resources such as Environments.\n Extended Templates An “extends” template has at least two components. The first component is a “root” template. This is typically the YAML pipeline that triggers the build/deploy. The second component is the “extends” template. The “extends” template augments the behavior of the “root” template by defining the entire flow or modifying the flow specified by the “root”.\nShared Connections The last feature our project will leverage is the ability to share service connections between projects. This allows us to define and manage all service connections in one place. Service connections can be created in the devops-core repository and then shared with the demo repository. The permissions and requirements of the service connection are enforced even when the connection is shared.\nThe Project We are going to create a new DevOps environment that uses secured YAML pipelines for both build and deploy operations. We also have our first customer: a development team that wouldl ike to deploy a shiny new Azure Container Registry! We need to ensure the following:\n The development team may create a deployment template The development team may manage the pipeline triggers The development team must obtain approvals for deployments The development team must use a predefined build \u0026 release pipeline.  At the end of the project the development team will be able to deploy a container registry using a secured devops implimentation.\nArchitecture Overview Our “separation of concerns” pattern uses a secure project that is owned and maintained by the DevOps team. We’ll name this project devops-core. The devops-core project will be home to service connections, pipeline templates and the IaC needed to maintain and run the pipeline infrastructure. We’ll go int each of these later as we build them out and secure them.\nAdditional projects are created for other development teams. Members of development teams may view the contents of the devops-core project (minus secret things) but are unable to make changes to devops-core resources without obtaining approvals from the DevOps team.   Fig 1: Architecture Overview   Implimentation We’ll start the implimentation by creating and configuring our devops-core project and all of its dependencies. After that we’ll build out a demo project for our development team. We will then create a little bicep template and a YAML pipelie to deploy the project.\nThis guide makes the following assumptions:\n You’ve already got an Azure Subscription. You’ve already got an Azure DevOps Organization.  Organization Setup Let’s create two groups: devops-core and demo.\n Sign into Azure DevOps (ADO) Navigate to ‘Organization’ settings in the lower left corner. Under ‘Security’ choose ‘Permissions’. Create two groups: devops-core and demo    New ADO Permission Groups   devops-core Create the Project Now that we have the two groups setup we can create the devops-core project. This step is pretty easy - just navigate back to the organization page and click the “+ New Project” button in the upper-right.\n  New ADO PProject   Set Permissions Head back to the Organization settings and update the permissions of those two groups created previously.\n Add the devops-core group as a member to [devops-core]/Project Administrators Add the demo group as a member to [devops-core]/Readers  Create Repositories We will create one repository named pipeline. This repository will contain pipeline templates that will be extended by templates . ├── entry-point │ └── bicep-deployment.yml └── README.md ",
+  "wordCount" : "799",
   "inLanguage": "en",
-  "image":"https://jkososki.github.io/security_001.jpg","datePublished": "2022-01-15T09:16:26-06:00",
+  "image":"https://jkososki.github.io/img/security_001.jpg","datePublished": "2022-01-15T09:16:26-06:00",
   "dateModified": "2022-01-15T09:16:26-06:00",
   "author":{
     "@type": "Person",
@@ -197,17 +197,140 @@
     <h1 class="post-title">
       Secure YAML Pipelines in Azure Dev Ops
     </h1>
-    <div class="post-meta"><span title='2022-01-15 09:16:26 -0600 CST'>January 15, 2022</span>&nbsp;·&nbsp;0 min&nbsp;·&nbsp;Jason Kososki
+    <div class="post-meta"><span title='2022-01-15 09:16:26 -0600 CST'>January 15, 2022</span>&nbsp;·&nbsp;4 min&nbsp;·&nbsp;Jason Kososki
 
 </div>
   </header> 
 <figure class="entry-cover">
-        <img loading="lazy" srcset="https://jkososki.github.io/posts/ado-secure-yaml/security_001_hud72c8ec0271d0a5a898fb1fb561fe085_220927_360x0_resize_q75_box.jpg 360w ,https://jkososki.github.io/posts/ado-secure-yaml/security_001_hud72c8ec0271d0a5a898fb1fb561fe085_220927_480x0_resize_q75_box.jpg 480w ,https://jkososki.github.io/posts/ado-secure-yaml/security_001_hud72c8ec0271d0a5a898fb1fb561fe085_220927_720x0_resize_q75_box.jpg 720w ,https://jkososki.github.io/posts/ado-secure-yaml/security_001.jpg 1056w" 
-            sizes="(min-width: 768px) 720px, 100vw" src="https://jkososki.github.io/posts/ado-secure-yaml/security_001.jpg" alt="" 
+        <img loading="lazy" srcset="https://jkososki.github.io/posts/ado-secure-yaml/img/security_001_hud72c8ec0271d0a5a898fb1fb561fe085_220927_360x0_resize_q75_box.jpg 360w ,https://jkososki.github.io/posts/ado-secure-yaml/img/security_001_hud72c8ec0271d0a5a898fb1fb561fe085_220927_480x0_resize_q75_box.jpg 480w ,https://jkososki.github.io/posts/ado-secure-yaml/img/security_001_hud72c8ec0271d0a5a898fb1fb561fe085_220927_720x0_resize_q75_box.jpg 720w ,https://jkososki.github.io/posts/ado-secure-yaml/img/security_001.jpg 1056w" 
+            sizes="(min-width: 768px) 720px, 100vw" src="https://jkososki.github.io/posts/ado-secure-yaml/img/security_001.jpg" alt="" 
             width="1056" height="318">
         
-</figure>
+</figure><div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
 
+        <div class="inner"><ul>
+                <li>
+                    <a href="#core-concepts" aria-label="Core Concepts">Core Concepts</a><ul>
+                        
+                <li>
+                    <a href="#approvals-and-checks" aria-label="Approvals and Checks">Approvals and Checks</a></li>
+                <li>
+                    <a href="#extended-templates" aria-label="Extended Templates">Extended Templates</a></li>
+                <li>
+                    <a href="#shared-connections" aria-label="Shared Connections">Shared Connections</a></li></ul>
+                </li>
+                <li>
+                    <a href="#the-project" aria-label="The Project">The Project</a></li>
+                <li>
+                    <a href="#architecture-overview" aria-label="Architecture Overview">Architecture Overview</a></li>
+                <li>
+                    <a href="#implimentation" aria-label="Implimentation">Implimentation</a><ul>
+                        
+                <li>
+                    <a href="#organization-setup" aria-label="Organization Setup">Organization Setup</a></li>
+                <li>
+                    <a href="#devops-core" aria-label="devops-core">devops-core</a><ul>
+                        
+                <li>
+                    <a href="#create-the-project" aria-label="Create the Project">Create the Project</a></li>
+                <li>
+                    <a href="#set-permissions" aria-label="Set Permissions">Set Permissions</a></li>
+                <li>
+                    <a href="#create-repositories" aria-label="Create Repositories">Create Repositories</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Let’s talk about YAML pipelines in Azure DevOps. YAML pipelines are great! Using YAML pipelines in Azure DevOps allows deployment pipelines to be expressed as code. Expressing pipelines as code simplifies the use of version control to support build &amp; release pipelines. It also allows DevOps professionals to create libraries of pipeline code that can be reused to accelerate new tasks. All of this is great, but it is also important to ensure that pipelines are secure. <br>
+<br>
+One approach to securing a pipeline is to set a clear separation of responsibilities between those who write the code and those who manage the resources that deploy and execute the code. In some industries this may be more than a best practice; it may be a requirement. Today we’re going to walk through the implementation of a pattern that can be leveraged to build a secure environment that encourages collaboration and cross-training. <br>
+<br></p>
+<h1 id="core-concepts">Core Concepts<a hidden class="anchor" aria-hidden="true" href="#core-concepts">#</a></h1>
+<p>There are a few core concepts that we&rsquo;ll be working with to impliment our pattern.  These Azure DevOps features will allow us to secure resources when using YAML templates.</p>
+<h2 id="approvals-and-checks">Approvals and Checks<a hidden class="anchor" aria-hidden="true" href="#approvals-and-checks">#</a></h2>
+<p>A service connection is what allows Azure DevOps (ADO) to securely connect to external resources such as the Azure Resource Manager, Kubernetes, etc.  It is possible to add all sorts of conditions around the use of a service connection.  These are known as <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops&amp;tabs=check-pass">Approvals &amp; Checks</a>.  We will be using <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops&amp;tabs=check-pass#approvals">Approvals</a> and <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops&amp;tabs=check-pass#required-template">Required Templates</a> as part of our project.
+<br><br></p>
+<blockquote>
+<p><strong>Note:</strong> It is possible to use Approvals &amp; Checks with other resources such as <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops">Environments</a>.</p>
+</blockquote>
+<h2 id="extended-templates">Extended Templates<a hidden class="anchor" aria-hidden="true" href="#extended-templates">#</a></h2>
+<p>An <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/security/templates?view=azure-devops">&ldquo;extends&rdquo; template</a> has at least two components.  The first component is a &ldquo;root&rdquo; template.  This is typically the YAML pipeline that triggers the build/deploy.  The second component is the &ldquo;extends&rdquo; template.  The &ldquo;extends&rdquo; template augments the behavior of the &ldquo;root&rdquo; template by defining the entire flow or modifying the flow specified by the &ldquo;root&rdquo;.</p>
+<h2 id="shared-connections">Shared Connections<a hidden class="anchor" aria-hidden="true" href="#shared-connections">#</a></h2>
+<p>The last feature our project will leverage is the ability to share service connections between projects.  This allows us to define and manage all service connections in one place.  Service connections can be created in the <code>devops-core</code> repository and then shared with the <code>demo</code> repository.  The permissions and requirements of the service connection are enforced even when the connection is shared.</p>
+<h1 id="the-project">The Project<a hidden class="anchor" aria-hidden="true" href="#the-project">#</a></h1>
+<p>We are going to create a new DevOps environment that uses secured YAML pipelines for both build and deploy operations.  We also have our first customer:  a development team that wouldl ike to deploy a shiny new Azure Container Registry!  We need to ensure the following:</p>
+<ol>
+<li>The development team may create a deployment template</li>
+<li>The development team may manage the pipeline triggers</li>
+<li>The development team must obtain approvals for deployments</li>
+<li>The development team must use a predefined build &amp; release pipeline.</li>
+</ol>
+<p>At the end of the project the development team will be able to deploy a container registry using a secured devops implimentation.</p>
+<h1 id="architecture-overview">Architecture Overview<a hidden class="anchor" aria-hidden="true" href="#architecture-overview">#</a></h1>
+<p>Our &ldquo;separation of concerns&rdquo; pattern uses a secure project that is owned and maintained by the DevOps team.  We&rsquo;ll name this project <code>devops-core</code>.  The <code>devops-core</code> project will be home to service connections, pipeline templates and the IaC needed to maintain and run the pipeline infrastructure.  We&rsquo;ll go int each of these later as we build them out and secure them.</p>
+<p>Additional projects are created for other development teams.  Members of development teams may view the contents of the <code>devops-core</code> project (minus secret things) but are unable to make changes to <code>devops-core</code> resources without obtaining approvals from the DevOps team. <br></p>
+<figure>
+  <img src="img/secure-yaml.png" alt="site-image" title="site-image">
+  <figcaption>
+  Fig 1: Architecture Overview
+  </figcaption>
+</figure>
+<h1 id="implimentation">Implimentation<a hidden class="anchor" aria-hidden="true" href="#implimentation">#</a></h1>
+<p>We&rsquo;ll start the implimentation by creating and configuring our <code>devops-core</code> project and all of its dependencies. After that we&rsquo;ll build out a <code>demo</code> project for our development team.  We will then create a little bicep template and a YAML pipelie to deploy the project.<br><br></p>
+<p>This guide makes the following assumptions:</p>
+<ol>
+<li>You&rsquo;ve already got an <a href="https://azure.microsoft.com/en-us/free">Azure Subscription</a>.</li>
+<li>You&rsquo;ve already got an <a href="https://azure.microsoft.com/en-us/services/devops/">Azure DevOps Organization</a>.</li>
+</ol>
+<h2 id="organization-setup">Organization Setup<a hidden class="anchor" aria-hidden="true" href="#organization-setup">#</a></h2>
+<p>Let&rsquo;s create two groups:  <code>devops-core</code> and <code>demo</code>.</p>
+<ol>
+<li>Sign into Azure DevOps (ADO)</li>
+<li>Navigate to &lsquo;Organization&rsquo; settings in the lower left corner.</li>
+<li>Under &lsquo;Security&rsquo; choose &lsquo;Permissions&rsquo;.</li>
+<li>Create two groups:  <code>devops-core</code> and <code>demo</code></li>
+</ol>
+<figure>
+  <img src="img/ado-groups.png" alt="site-image" title="site-image" width="400x">
+  <figcaption>
+  New ADO Permission Groups
+  </figcaption>
+</figure>
+<h2 id="devops-core">devops-core<a hidden class="anchor" aria-hidden="true" href="#devops-core">#</a></h2>
+<h3 id="create-the-project">Create the Project<a hidden class="anchor" aria-hidden="true" href="#create-the-project">#</a></h3>
+<p>Now that we have the two groups setup we can create the <code>devops-core</code> project.  This step is pretty easy - just navigate back to the organization page and click the &ldquo;+ New Project&rdquo; button in the upper-right.<br></p>
+<figure>
+  <img src="img/ado-newproject.png" alt="site-image" title="site-image" width="350x">
+  <figcaption>
+  New ADO PProject
+  </figcaption>
+</figure>
+<h3 id="set-permissions">Set Permissions<a hidden class="anchor" aria-hidden="true" href="#set-permissions">#</a></h3>
+<p>Head back to the Organization settings and update the permissions of those two groups created previously.</p>
+<ol>
+<li>Add the <code>devops-core</code> group as a member to <code>[devops-core]/Project Administrators</code></li>
+<li>Add the <code>demo</code> group as a member to <code>[devops-core]/Readers</code></li>
+</ol>
+<h3 id="create-repositories">Create Repositories<a hidden class="anchor" aria-hidden="true" href="#create-repositories">#</a></h3>
+<p>We will create one repository named <code>pipeline</code>.  This repository will contain pipeline templates that will be extended by templates
+<br></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plaintext" data-lang="plaintext">.
+├── entry-point
+│   └── bicep-deployment.yml
+└── README.md
+</code></pre></div>
+
+  </div>
 
   <footer class="post-footer">
 
